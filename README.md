@@ -17,13 +17,13 @@ Installation Instructions
 
 Contributors
 ============
-http://github.com/BrennanNovak
-http://github.com/EdwardHotchkiss
+* http://github.com/BrennanNovak
+* http://github.com/EdwardHotchkiss
 
 Based On
 ========
-https://github.com/Zae/FacebookOAuth
-https://github.com/abraham/twitteroauth
+* https://github.com/Zae/FacebookOAuth
+* https://github.com/abraham/twitteroauth
 
 
 License

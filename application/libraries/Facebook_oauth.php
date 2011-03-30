@@ -70,14 +70,21 @@ class Facebook_oauth
 	{
 		$params = array();
 		$params["client_id"] = $this->client_id;
-		if(!empty($this->callback_url)){
-		  $params["redirect_uri"] = $this->callback_url;
+		
+		if(!empty($this->callback_url))
+		{
+			$params["redirect_uri"] = $this->callback_url;
 		}
-		if(is_array($scope)){
-		  $params["scope"] = implode(",", $scope);
-		}elseif($scope != NULL){
-		  $params["scope"] = $scope;
+		
+		if(is_array($scope))
+		{
+			$params["scope"] = implode(",", $scope);
 		}
+		elseif ($scope != NULL)
+		{
+			$params["scope"] = $scope;
+		}
+		
 		return self::AuthorizeUrl."?".OAuthUtils::build_http_query($params);
 	}
   
@@ -141,80 +148,84 @@ class Facebook_oauth
 		return $this->decode_JSON ? json_decode($response) : $response;
 	}
   
-  /**
-   * POST wrapper for http.
-   */
-  public function post($location, $postfields = array()){
-    $url = self::GraphUrl.OAuthUtils::urlencode_rfc3986($location);
-    if(!empty($this->access_token)){
-      $postfields["access_token"] = $this->access_token;
-    }
-    $response = $this->http($url, self::$METHOD_POST, $postfields);
-    return $this->decode_JSON ? json_decode($response) : $response;
-  }
-  
-  /**
-   * DELETE wrapper for http.
-   */
-  public function delete($location, $postfields = array()){
-    $url = self::GraphUrl.OAuthUtils::urlencode_rfc3986($location);
-    $postfields = array();
-    if(!empty($this->access_token)){
-      $postfields["access_token"] = $this->access_token;
-    }
-    $response = $this->http($url, self::$METHOD_DELETE, $postfields);
-    return $this->decode_JSON ? json_decode($response) : $response;
-  }
+	/* POST wrapper for http.*/
+	public function post($location, $postfields = array())
+	{
+		$url = self::GraphUrl.OAuthUtils::urlencode_rfc3986($location);
+		if(!empty($this->access_token))
+		{
+	  		$postfields["access_token"] = $this->access_token;
+		}
+		
+		$response = $this->http($url, self::$METHOD_POST, $postfields);
+		
+		return $this->decode_JSON ? json_decode($response) : $response;
+	}
+	
+	/* DELETE wrapper for http. */
+	public function delete($location, $postfields = array())
+	{
+		$url = self::GraphUrl.OAuthUtils::urlencode_rfc3986($location);
+		$postfields = array();
+		
+		if(!empty($this->access_token))
+		{
+	  		$postfields["access_token"] = $this->access_token;
+		}
+		
+		$response = $this->http($url, self::$METHOD_DELETE, $postfields);
+		return $this->decode_JSON ? json_decode($response) : $response;
+	}
 
-  /**
-   * Make an HTTP request
-   *
-   * @return API results
-   */
-  private function http($url, $method = "GET", $postfields=NULL){
-    $this->http_info = array();
-    $handle = curl_init();
-    /* Curl settings */
-    curl_setopt($handle, CURLOPT_HEADER, FALSE);
-    curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
-    curl_setopt($handle, CURLOPT_HTTPHEADER, array('Expect:'));
-    curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $this->verifypeer);
-    curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, $this->connecttimeout);
-    curl_setopt($handle, CURLOPT_TIMEOUT, $this->timeout);
-    curl_setopt($handle, CURLOPT_USERAGENT, $this->useragent);
-    curl_setopt($handle, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
-    
-    if ($this->proxy_settings['behind_proxy']){
-      curl_setopt($ci, CURLOPT_PROXY, $this->proxy_settings['host']);
-      curl_setopt($ci, CURLOPT_PROXYPORT, $this->proxy_settings['port']);
-      curl_setopt($ci, CURLOPT_PROXYUSERPWD, "{$this->proxy_settings['user']}:{$this->proxy_settings['pass']}");
-      curl_setopt($ci, CURLOPT_PROXYTYPE, $this->proxy_settings['type']);
-      curl_setopt($ci, CURLOPT_PROXYAUTH, $this->proxy_settings['auth']);
-    }
-    
-    switch($method){
-      case self::$METHOD_POST:
-        curl_setopt($handle, CURLOPT_POST, TRUE);
-        if (!empty($postfields)) {
-          curl_setopt($handle, CURLOPT_POSTFIELDS, $postfields);
-        }
-        break;
-      case self::$METHOD_DELETE:
-        curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        if (!empty($postfields)){
-          $url .= "?".OAuthUtils::build_http_query($postfields);
-        }
-        break;
-    }
-    curl_setopt($handle, CURLOPT_URL, $url);
-    $response = curl_exec($handle);
-    $this->http_code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-    $this->http_info = array_merge($this->http_info, curl_getinfo($handle));
-    $this->url = $url;
-    curl_close($handle);
-    return $response;
-  }
+	/**
+	* Make an HTTP request
+	*
+	* @return API results
+	*/
+	private function http($url, $method = "GET", $postfields=NULL){
+	$this->http_info = array();
+	$handle = curl_init();
+	/* Curl settings */
+	curl_setopt($handle, CURLOPT_HEADER, FALSE);
+	curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
+	curl_setopt($handle, CURLOPT_HTTPHEADER, array('Expect:'));
+	curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $this->verifypeer);
+	curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, $this->connecttimeout);
+	curl_setopt($handle, CURLOPT_TIMEOUT, $this->timeout);
+	curl_setopt($handle, CURLOPT_USERAGENT, $this->useragent);
+	curl_setopt($handle, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
+	
+	if ($this->proxy_settings['behind_proxy']){
+	  curl_setopt($ci, CURLOPT_PROXY, $this->proxy_settings['host']);
+	  curl_setopt($ci, CURLOPT_PROXYPORT, $this->proxy_settings['port']);
+	  curl_setopt($ci, CURLOPT_PROXYUSERPWD, "{$this->proxy_settings['user']}:{$this->proxy_settings['pass']}");
+	  curl_setopt($ci, CURLOPT_PROXYTYPE, $this->proxy_settings['type']);
+	  curl_setopt($ci, CURLOPT_PROXYAUTH, $this->proxy_settings['auth']);
+	}
+	
+	switch($method){
+	  case self::$METHOD_POST:
+	    curl_setopt($handle, CURLOPT_POST, TRUE);
+	    if (!empty($postfields)) {
+	      curl_setopt($handle, CURLOPT_POSTFIELDS, $postfields);
+	    }
+	    break;
+	  case self::$METHOD_DELETE:
+	    curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'DELETE');
+	    if (!empty($postfields)){
+	      $url .= "?".OAuthUtils::build_http_query($postfields);
+	    }
+	    break;
+	}
+	curl_setopt($handle, CURLOPT_URL, $url);
+	$response = curl_exec($handle);
+	$this->http_code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+	$this->http_info = array_merge($this->http_info, curl_getinfo($handle));
+	$this->url = $url;
+	curl_close($handle);
+	return $response;
+	}
   
   /**
    * Get the header info to store.
