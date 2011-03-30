@@ -92,11 +92,11 @@ class Facebook_oauth
 		$params["redirect_uri"] = $this->callback_url;
 		}
 		$url = self::AccessTokenUrl."?".OAuthUtils::build_http_query($params);
+
 		$contents = $this->http($url, self::$METHOD_GET);
-		
-		preg_match("/^access_token=(.*)$/i", $contents, $matches);
-		
-		return $this->access_token = $matches[1];
+		parse_str($contents, $output);
+		$this->access_token = $output['access_token'];
+		return $this->access_token;
 	}
   
 	/* GET wrapper for http. */
@@ -177,7 +177,7 @@ class Facebook_oauth
     /* Curl settings */
     curl_setopt($handle, CURLOPT_HEADER, FALSE);
     curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
+    //curl_setopt($handle, CURLOPT_PROTOCOLS, "CURLPROTO_HTTPS");
     curl_setopt($handle, CURLOPT_HTTPHEADER, array('Expect:'));
     curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $this->verifypeer);
     curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, $this->connecttimeout);

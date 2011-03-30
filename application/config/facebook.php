@@ -1,12 +1,17 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
 * Name:		Facebook Config
-* Author: 	Brennan Novak
+* Authors: 	Brennan Novak & Edward Hotchkiss
+*
 *         	@brennannovak
+*			
+*			
 *          
-* Created by Brennan Novak
+* Created by Brennan Novak & Edward Hotchkiss
 *
 * Project:	http://social-igniter.com
+* 			https://apps.edwardhotchkiss.com/posseup/
+*
 * Source: 	http://github.com/brennannovak/codeigniter-facebook-oauth
 */
 
