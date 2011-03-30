@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'https://apps.edwardhotchkiss.com/posseup/';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
