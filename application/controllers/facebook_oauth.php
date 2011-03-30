@@ -20,7 +20,7 @@ class Oauth extends CI_Controller
 	
 	function index()
 	{
-		// If Returning from Fuckbook with "code" in query string
+		// If Returning from Facebook with "code" in query string
 		if (isset($_GET['code']))
 		{
 			$this->data['result'] = $this->facebook_oauth->getAccessToken($_GET['code']);
